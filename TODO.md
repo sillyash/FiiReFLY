@@ -3,20 +3,20 @@
 ## Tooling
 
 justfile
-- [ ] setup
-- [ ] web-setup
-- [ ] api-setup
+- [x] setup
+- [x] web-setup
+- [x] api-setup
 
 pre-commit
-- [ ] api
-  - [ ] ruff lint + format
-  - [ ] uv lock
-  - [ ] django related ?
-- [ ] web
-  - [ ] NodeJS related ?
-- [ ] general
-  - [ ] bump version
-  - [ ] deploy (push w/ tags) ?
+- [x] api
+  - [x] ruff lint + format
+  - [x] uv lock
+  - [x] django check + migrations
+- [x] web
+  - [x] lint + format + type-check
+- [x] general
+  - [x] bump version (`just bump`)
+  - [x] deploy (push w/ tags) (`just deploy`)
 
 
 ## Web
@@ -36,8 +36,8 @@ pre-commit
 
 ### Setup
 
-- [ ] settings
-- [ ] deps (REST Framework ?)
+- [x] settings
+- [x] deps (REST Framework + CORS)
 - [ ] livre d'or (POST only)
 - [ ] dates de soirees (GET only)
 - [ ] admin dashboard
