@@ -1,0 +1,69 @@
+# Install with `just hooks`, run on everything with `just check`.
+repos:
+  # --- general ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+        exclude: ^web/(tsconfig.*|\.vscode/.*)\.json$
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  # --- api ---
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.3
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        files: ^api/
+      - id: ruff-format
+        files: ^api/
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.13.6
+    hooks:
+      - id: uv-lock
+        args: [--project, api]
+        files: ^api/(pyproject\.toml|uv\.lock)$
+
+  - repo: local
+    hooks:
+      - id: django-check
+        name: django check
+        entry: uv run --project api api/manage.py check
+        language: system
+        files: ^api/.*\.py$
+        pass_filenames: false
+      - id: django-migrations
+        name: django missing migrations
+        entry: uv run --project api api/manage.py makemigrations --check --dry-run
+        language: system
+        files: ^api/.*\.py$
+        pass_filenames: false
+
+  # --- web ---
+  - repo: local
+    hooks:
+      - id: web-lint
+        name: web lint (oxlint + eslint)
+        entry: npm --prefix web run lint
+        language: system
+        files: ^web/
+        pass_filenames: false
+      - id: web-format
+        name: web format (prettier)
+        entry: npm --prefix web run format
+        language: system
+        files: ^web/src/
+        pass_filenames: false
+      - id: web-type-check
+        name: web type-check
+        entry: npm --prefix web run type-check
+        language: system
+        files: ^web/.*\.(ts|vue)$
+        pass_filenames: false
