@@ -24,12 +24,12 @@ pre-commit
 ### Squelette
 
 - [ ] deps + filesystem
-- [ ] routing
-- [ ] header
-- [ ] footer
-- [ ] css base
+- [x] routing
+- [x] header
+- [x] footer
+- [x] css base
   - [ ] theme
-  - [ ] footer/header/main spacing
+  - [x] footer/header/main spacing
 
 ## API
 

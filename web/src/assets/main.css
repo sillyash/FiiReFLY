@@ -1,0 +1,31 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f4;
+  --color-text: #141414;
+  --color-accent: #c81e1e;
+  --color-border: #141414;
+  --color-selection-bg: #141414;
+  --color-selection-text: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, sans-serif;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+::selection {
+  background-color: var(--color-selection-bg);
+  color: var(--color-selection-text);
+}
