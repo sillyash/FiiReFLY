@@ -6,5 +6,22 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "django>=5.2.18",
+    "django-cors-headers>=4.9.0",
     "djangorestframework>=3.18.3",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.3",
+]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["**/migrations"]
+
+[tool.ruff.format]
+# Matches the quotes Django's startproject templates generate.
+quote-style = "single"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ"]
