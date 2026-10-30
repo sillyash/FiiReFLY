@@ -1,4 +1,4 @@
-# FiiReFLY
+# Krokodiile
 
 Site Web
 
@@ -26,7 +26,7 @@ Site Web
 ## Features
 
 > [!TIP]
-> 
+>
 > Voir [`TODO.md`](TODO.md), sinon
 > GitHub Issues !
 
