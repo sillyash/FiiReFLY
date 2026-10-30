@@ -38,9 +38,9 @@ pre-commit
 
 - [x] settings
 - [x] deps (REST Framework + CORS)
-- [ ] livre d'or (POST only)
-- [ ] dates de soirees (GET only)
-- [ ] admin dashboard
+- [x] livre d'or (POST only)
+- [x] dates de soirees (GET only)
+- [x] admin dashboard
 
 ### Deploiement
 
