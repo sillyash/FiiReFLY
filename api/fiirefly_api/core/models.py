@@ -1,5 +1,8 @@
 from django.conf import settings
+from django.core.validators import RegexValidator
 from django.db import models
+
+from .images import square_webp
 
 
 class Soiree(models.Model):
@@ -39,3 +42,54 @@ class LivreDorEntry(models.Model):
 
     def __str__(self):
         return f'{self.nom} : {self.message[:40]}'
+
+
+class Pole(models.Model):
+    nom = models.CharField(max_length=50, unique=True)
+    couleur = models.CharField(
+        max_length=7,
+        default='#cb6c89',
+        validators=[RegexValidator(r'^#[0-9a-fA-F]{6}$', 'Format #RRGGBB stp')],
+        help_text='Couleur des lucioles (hex, ex #cb6c89)',
+    )
+    ordre = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['ordre', 'nom']
+        verbose_name = 'pôle'
+
+    def __str__(self):
+        return self.nom
+
+
+class Membre(models.Model):
+    nom = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, blank=True, help_text='Prez, trez, respo com...')
+    pole = models.ForeignKey(
+        Pole, null=True, blank=True, on_delete=models.SET_NULL, related_name='membres'
+    )
+    photo = models.ImageField(
+        upload_to='trombi/', blank=True, help_text='Crop en carré + compressée auto'
+    )
+    description = models.TextField(blank=True)
+    ordre = models.PositiveSmallIntegerField(default=0)
+    is_visible = models.BooleanField(default=True)
+
+    class Meta:
+        # les sans pole a la fin
+        ordering = [models.F('pole__ordre').asc(nulls_last=True), 'ordre', 'nom']
+
+    def __str__(self):
+        return self.nom
+
+    def save(self, *args, **kwargs):
+        old = None
+        if self.pk:
+            old = Membre.objects.filter(pk=self.pk).values_list('photo', flat=True).first()
+        # nouvelle photo uploadée -> on la traite, et on vire l'ancienne
+        if self.photo and not self.photo._committed:
+            processed = square_webp(self.photo)
+            self.photo.save(processed.name, processed, save=False)
+        super().save(*args, **kwargs)
+        if old and old != self.photo.name:
+            self.photo.storage.delete(old)
