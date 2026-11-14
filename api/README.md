@@ -56,7 +56,7 @@ Routes :
 | `/auth/me/`       | utilisateur connecte (ou `null`) + jeton CSRF          |
 
 La session est un cookie : l'API doit etre sur le meme site que le front
-(ex. `fiirefly-api.sillyash.com` pour `sillyash.com`).
+(ex. `fiirefly-api.sillyash.com` pour `fiirefly.sillyash.com`).
 
 ## Production
 
@@ -65,6 +65,7 @@ via Cloudflare Tunnel). Config et scripts dans le repo homelab :
 `services/fiirefly/` ([README](https://github.com/sillyash/homelab/tree/main/services/fiirefly)).
 
 ```bash
+# remote = git@github.com:sillyash/FiiReFLY.git (ex-Krokodiile)
 git -C ~/Krokodiile pull
 sudo ~/homelab/services/fiirefly/deploy.sh
 ```
