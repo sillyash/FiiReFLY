@@ -8,6 +8,7 @@
       <RouterLink to="/" class="nav-link">Accueil</RouterLink>
       <RouterLink to="/soirees" class="nav-link">Soirées</RouterLink>
       <RouterLink to="/livre-dor" class="nav-link">Livre d'or</RouterLink>
+      <RouterLink to="/membres" class="nav-link">Membres</RouterLink>
     </div>
 
     <div class="toggles">

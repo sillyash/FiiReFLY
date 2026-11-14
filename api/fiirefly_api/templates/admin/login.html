@@ -1,0 +1,12 @@
+{% extends "admin/login.html" %}
+
+{% block content %}
+{# les comptes arise ont pas de mdp, donc bouton arise pour la liste #}
+<p style="text-align:center;margin-bottom:1.5em">
+  <a class="button" href="{% url 'auth-login' %}?admin=1" style="display:inline-block;padding:10px 15px">
+    Se connecter avec Arise Connect
+  </a>
+</p>
+<p style="text-align:center;color:var(--body-quiet-color)">ou avec un compte admin classique :</p>
+{{ block.super }}
+{% endblock %}
