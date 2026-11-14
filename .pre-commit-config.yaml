@@ -1,4 +1,6 @@
 # Install with `just hooks`, run on everything with `just check`.
+# les hooks font que checker, jamais de fix auto : sinon conflit avec le stash des
+# fichiers pas stagés et pre-commit rollback tout. Pour fix -> `just lint` / `just fmt`.
 repos:
   # --- general ---
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -19,9 +21,9 @@ repos:
     rev: v0.17.3
     hooks:
       - id: ruff-check
-        args: [--fix]
         files: ^api/
       - id: ruff-format
+        args: [--check]
         files: ^api/
 
   - repo: https://github.com/astral-sh/uv-pre-commit
@@ -51,13 +53,13 @@ repos:
     hooks:
       - id: web-lint
         name: web lint (oxlint + eslint)
-        entry: npm --prefix web run lint
+        entry: npm --prefix web run check:lint
         language: system
         files: ^web/
         pass_filenames: false
       - id: web-format
         name: web format (prettier)
-        entry: npm --prefix web run format
+        entry: npm --prefix web run check:format
         language: system
         files: ^web/src/
         pass_filenames: false
