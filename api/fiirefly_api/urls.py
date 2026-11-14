@@ -4,11 +4,12 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from fiirefly_api.core.views import LivreDorEntryViewSet, SoireeViewSet
+from fiirefly_api.core.views import LivreDorEntryViewSet, MembreViewSet, SoireeViewSet
 
 router = routers.DefaultRouter()
 router.register('soirees', SoireeViewSet)
 router.register('livre-dor', LivreDorEntryViewSet)
+router.register('membres', MembreViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
