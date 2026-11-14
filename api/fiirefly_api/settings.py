@@ -166,6 +166,10 @@ STATIC_URL = 'static/'
 # collectstatic output (admin CSS/JS), served by nginx in production.
 STATIC_ROOT = os.environ.get('FIIREFLY_STATIC_ROOT', BASE_DIR / 'staticfiles')
 
+# uploads (photos trombi), en prod c nginx qui sert /media/
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.environ.get('FIIREFLY_MEDIA_ROOT', BASE_DIR / 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
