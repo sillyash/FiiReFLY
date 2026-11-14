@@ -45,7 +45,7 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
-      # base_path is "/FiiReFLY" on github.io, empty with a custom domain.
+      # base_path vide avec le domaine custom fiirefly.sillyash.com
       - run: npm run type-check
       - run: npm run build-only -- --base="${{ steps.pages.outputs.base_path }}/"
       - uses: actions/upload-pages-artifact@v3

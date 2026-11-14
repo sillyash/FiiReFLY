@@ -31,7 +31,7 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 | `VITE_API_URL` | `.env.production`  | API de prod, meme site que le front  |
 
 Surcharge locale possible dans `.env.local` (ignore par git).
-Le chemin de base (`/Krokodiile/`) est fourni au build par GitHub Pages.
+Domaine custom `fiirefly.sillyash.com` (reglé dans Settings > Pages), donc base `/`.
 
 ## Project Setup
 
