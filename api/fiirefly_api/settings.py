@@ -102,7 +102,8 @@ ROOT_URLCONF = 'fiirefly_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # override du login admin (bouton arise)
+        'DIRS': [BASE_DIR / 'fiirefly_api' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
