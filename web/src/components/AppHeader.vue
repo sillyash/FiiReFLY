@@ -1,7 +1,7 @@
 <template>
   <header class="site-header">
     <RouterLink id="branding" to="/">
-      <h1>TITRE_REPLACE</h1>
+      <h1>FiiReFLY</h1>
     </RouterLink>
 
     <div id="navbar">

@@ -1,6 +1,6 @@
 <template>
   <footer class="site-footer">
-    <p>© {{ new Date().getFullYear() }} TITRE_REPLACE</p>
+    <p>© {{ new Date().getFullYear() }} FiiReFLY</p>
   </footer>
 </template>
 
