@@ -25,6 +25,7 @@ pre-commit
 
 - [ ] deps + filesystem
 - [x] routing
+- [x] page membres (trombi lucioles, click -> detail)
 - [x] header
 - [x] footer
 - [x] css base
@@ -42,6 +43,10 @@ pre-commit
 - [x] livre d'or (POST only)
 - [x] dates de soirees (GET only)
 - [x] admin dashboard
+- [x] livre d'or GET (que les visibles)
+- [x] trombi : poles (couleur) + membres, photo crop carré webp
+- [x] role "Liste" sur l'admin + login admin via arise
+- [ ] mapper un groupe arise -> role Liste (sinon a la main dans l'admin)
 
 ### Deploiement
 
@@ -49,3 +54,4 @@ pre-commit
 - [x] homelab : systemd + nginx + deploy.sh (`services/fiirefly/`)
 - [ ] cert + route Cloudflare Tunnel `fiirefly-api.sillyash.com`
 - [ ] redirect URI Arise Connect en prod
+- [ ] nginx : `location /media/` -> `FIIREFLY_MEDIA_ROOT` (photos trombi)
