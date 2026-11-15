@@ -6,6 +6,7 @@
 
     <div id="navbar">
       <RouterLink to="/" class="nav-link">Accueil</RouterLink>
+      <RouterLink to="/programme" class="nav-link">Programme</RouterLink>
       <RouterLink to="/soirees" class="nav-link">Soirées</RouterLink>
       <RouterLink to="/livre-dor" class="nav-link">Livre d'or</RouterLink>
       <RouterLink to="/membres" class="nav-link">Membres</RouterLink>

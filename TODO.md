@@ -25,6 +25,7 @@ pre-commit
 
 - [ ] deps + filesystem
 - [x] routing
+- [x] page programme (statique)
 - [x] page membres (trombi lucioles, click -> detail)
 - [x] header
 - [x] footer
