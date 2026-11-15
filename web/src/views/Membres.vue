@@ -69,6 +69,8 @@ export default {
 </script>
 
 <style scoped>
+/* inspire tres fortement de https://www.grabmotion.dev/effects/bubble-swarm */
+
 .legende {
   display: flex;
   flex-wrap: wrap;
