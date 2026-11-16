@@ -1,7 +1,5 @@
 # FiiReFLY
 
-Site Web de la liste - https://fiirefly.sillyash.com
-
 ## Stack
 
 - VueJS : frontend
@@ -27,8 +25,7 @@ Site Web de la liste - https://fiirefly.sillyash.com
 
 > [!TIP]
 >
-> Voir [`TODO.md`](TODO.md), sinon
-> GitHub Issues !
+> Voir GitHub Issues !
 
 ## Dev
 
@@ -59,6 +56,6 @@ just
 Si possible:
 - S'organiser avec GitHub issues
 - Faire des branches -- `main` seulement pour les merge car trigger les deploy
-- Mettre a jour `TODO.md`
+- Mettre a jour les issues
 - Kiffer
 - Eviter au plus possible les LLM -- exceptions possibles pour debug -- on est la pour creer !
