@@ -44,13 +44,30 @@ class PoleAdmin(admin.ModelAdmin):
 
 @admin.register(Membre)
 class MembreAdmin(admin.ModelAdmin):
-    list_display = ['photo_preview', 'nom', 'role', 'pole', 'ordre', 'is_visible']
+    list_display = ['photo_preview', 'nom', 'role', 'poles_display', 'ordre', 'is_visible']
     list_display_links = ['photo_preview', 'nom']
     list_editable = ['ordre', 'is_visible']
-    list_filter = ['pole', 'is_visible']
+    list_filter = ['poles', 'is_visible']
     search_fields = ['nom', 'role']
     readonly_fields = ['photo_preview']
-    fields = ['nom', 'role', 'pole', 'photo', 'photo_preview', 'description', 'ordre', 'is_visible']
+    filter_horizontal = ['poles']
+    fields = [
+        'nom',
+        'role',
+        'poles',
+        'photo',
+        'photo_preview',
+        'description',
+        'ordre',
+        'is_visible',
+    ]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('poles')
+
+    @admin.display(description='Pôles')
+    def poles_display(self, obj):
+        return ', '.join(p.nom for p in obj.poles.all()) or '-'
 
     @admin.display(description='Photo')
     def photo_preview(self, obj):

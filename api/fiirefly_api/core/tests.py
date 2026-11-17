@@ -93,11 +93,11 @@ class MembreTests(APITestCase):
         super().tearDownClass()
         shutil.rmtree(MEDIA_TMP, ignore_errors=True)
 
-    def test_list_visible_with_pole_no_pagination(self):
+    def test_list_visible_with_poles_no_pagination(self):
         com = Pole.objects.create(nom='Com', couleur='#123456', ordre=2)
         bureau = Pole.objects.create(nom='Bureau', ordre=1)
-        Membre.objects.create(nom='Zoe', pole=com)
-        Membre.objects.create(nom='Alex', role='Prez', pole=bureau)
+        Membre.objects.create(nom='Zoe').poles.add(com)
+        Membre.objects.create(nom='Alex', role='Prez').poles.add(bureau)
         Membre.objects.create(nom='Cache', is_visible=False)
         Membre.objects.create(nom='Sans pole')
 
@@ -105,8 +105,22 @@ class MembreTests(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual([m['nom'] for m in response.data], ['Alex', 'Zoe', 'Sans pole'])
-        pole = {'id': com.id, 'nom': 'Com', 'couleur': '#123456'}
-        self.assertEqual(response.data[1]['pole'], pole)
+        pole = {'id': com.id, 'nom': 'Com', 'couleur': '#123456', 'ordre': 2}
+        self.assertEqual(response.data[1]['poles'], [pole])
+        self.assertEqual(response.data[2]['poles'], [])
+
+    def test_multi_poles_listed_once_sorted_by_main_pole(self):
+        bureau = Pole.objects.create(nom='Bureau', ordre=1)
+        asso = Pole.objects.create(nom='Asso', ordre=2)
+        com = Pole.objects.create(nom='Com', ordre=3)
+        Membre.objects.create(nom='Zoe').poles.add(asso)
+        # pole principal = Bureau, donc avant Zoe
+        Membre.objects.create(nom='Yann').poles.add(com, bureau)
+
+        response = self.client.get('/api/membres/')
+
+        self.assertEqual([m['nom'] for m in response.data], ['Yann', 'Zoe'])
+        self.assertEqual([p['nom'] for p in response.data[0]['poles']], ['Bureau', 'Com'])
 
     def test_photo_cropped_square_webp(self):
         membre = Membre.objects.create(nom='Alex', photo=fake_photo())

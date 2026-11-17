@@ -37,7 +37,7 @@ export default {
     flight(): Record<string, string> {
       const i = this.index
       return {
-        '--glow-color': this.membre.pole?.couleur ?? 'var(--color-accent)',
+        '--glow-color': this.membre.poles[0]?.couleur ?? 'var(--color-accent)',
         '--fly-duration': `${7 + ((i * 37) % 50) / 10}s`,
         '--fly-delay': `-${((i * 13) % 60) / 10}s`,
         '--blink-delay': `-${((i * 7) % 30) / 10}s`,
