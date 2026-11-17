@@ -194,3 +194,44 @@ REST_FRAMEWORK = {
 
 if not DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ['rest_framework.renderers.JSONRenderer']
+
+
+# Logging
+# https://docs.djangoproject.com/en/5.2/topics/logging/
+
+LOG_FILE = os.environ.get('FIIREFLY_LOG_FILE')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{asctime} [{levelname}] {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'main': (
+            {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': LOG_FILE,
+                'maxBytes': 5 * 1024 * 1024,
+                'backupCount': 1,
+                'encoding': 'utf-8',
+                'formatter': 'simple',
+            }
+            if LOG_FILE
+            else {'class': 'logging.StreamHandler', 'formatter': 'simple'}
+        ),
+        'null': {'class': 'logging.NullHandler'},
+    },
+    'root': {
+        'handlers': ['main'],
+        'level': os.environ.get('FIIREFLY_LOG_LEVEL', 'INFO'),
+    },
+    'loggers': {
+        'django': {'handlers': ['main'], 'level': 'INFO', 'propagate': False},
+        'django.server': {'handlers': ['null'], 'propagate': False},
+        'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},
+    },
+}
