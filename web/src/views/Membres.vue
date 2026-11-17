@@ -49,11 +49,11 @@ export default {
     }
   },
   computed: {
-    // poles dans l'ordre de l'api (deja trié par ordre de pole)
+    // tous les poles representés, dans l'ordre des poles
     poles(): Pole[] {
       const seen = new Map<number, Pole>()
-      for (const m of this.membres) if (m.pole) seen.set(m.pole.id, m.pole)
-      return [...seen.values()]
+      for (const m of this.membres) for (const p of m.poles) seen.set(p.id, p)
+      return [...seen.values()].sort((a, b) => a.ordre - b.ordre)
     },
   },
   async mounted() {

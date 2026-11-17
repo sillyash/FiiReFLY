@@ -1,3 +1,4 @@
+from django.db.models import F, Min
 from rest_framework import mixins, permissions, viewsets
 from rest_framework.throttling import ScopedRateThrottle
 
@@ -36,7 +37,13 @@ class LivreDorEntryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, views
 
 
 class MembreViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Membre.objects.filter(is_visible=True).select_related('pole')
+    # trié par le pole principal (ordre le plus petit), les sans pole a la fin
+    queryset = (
+        Membre.objects.filter(is_visible=True)
+        .annotate(pole_ordre=Min('poles__ordre'))
+        .order_by(F('pole_ordre').asc(nulls_last=True), 'ordre', 'nom')
+        .prefetch_related('poles')
+    )
     serializer_class = MembreSerializer
     # le trombi affiche tout le monde d'un coup
     pagination_class = None

@@ -19,12 +19,12 @@ class LivreDorEntrySerializer(serializers.ModelSerializer):
 class PoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pole
-        fields = ['id', 'nom', 'couleur']
+        fields = ['id', 'nom', 'couleur', 'ordre']
 
 
 class MembreSerializer(serializers.ModelSerializer):
-    pole = PoleSerializer(read_only=True)
+    poles = PoleSerializer(many=True, read_only=True)
 
     class Meta:
         model = Membre
-        fields = ['id', 'nom', 'role', 'pole', 'photo', 'description']
+        fields = ['id', 'nom', 'role', 'poles', 'photo', 'description']

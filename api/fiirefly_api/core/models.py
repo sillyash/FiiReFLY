@@ -65,9 +65,7 @@ class Pole(models.Model):
 class Membre(models.Model):
     nom = models.CharField(max_length=100)
     role = models.CharField(max_length=100, blank=True, help_text='Prez, trez, respo com...')
-    pole = models.ForeignKey(
-        Pole, null=True, blank=True, on_delete=models.SET_NULL, related_name='membres'
-    )
+    poles = models.ManyToManyField(Pole, blank=True, related_name='membres')
     photo = models.ImageField(
         upload_to='trombi/', blank=True, help_text='Crop en carré + compressée auto'
     )
@@ -76,8 +74,8 @@ class Membre(models.Model):
     is_visible = models.BooleanField(default=True)
 
     class Meta:
-        # les sans pole a la fin
-        ordering = [models.F('pole__ordre').asc(nulls_last=True), 'ordre', 'nom']
+        # le tri par pole se fait dans la vue (M2M = doublons si on trie dessus ici)
+        ordering = ['ordre', 'nom']
 
     def __str__(self):
         return self.nom

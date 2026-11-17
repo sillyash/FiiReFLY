@@ -6,7 +6,11 @@
       <span v-else class="photo initiales" aria-hidden="true">{{ initiales(membre.nom) }}</span>
       <h2>{{ membre.nom }}</h2>
       <p v-if="membre.role" class="role">{{ membre.role }}</p>
-      <span v-if="membre.pole" class="pole">{{ membre.pole.nom }}</span>
+      <ul v-if="membre.poles.length" class="poles">
+        <li v-for="pole in membre.poles" :key="pole.id" :style="{ background: pole.couleur }">
+          {{ pole.nom }}
+        </li>
+      </ul>
       <p v-if="membre.description" class="description">{{ membre.description }}</p>
     </div>
   </dialog>
@@ -28,7 +32,7 @@ export default {
   emits: ['close'],
   computed: {
     couleur(): string {
-      return this.membre?.pole?.couleur ?? 'var(--color-accent)'
+      return this.membre?.poles[0]?.couleur ?? 'var(--color-accent)'
     },
   },
   watch: {
@@ -112,11 +116,19 @@ h2 {
   font-weight: bold;
 }
 
-.pole {
-  margin-top: 0.5rem;
+.poles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.poles li {
   padding: 0.15rem 0.7rem;
   border-radius: 999px;
-  background: var(--glow-color);
   color: #fff;
   font-size: 0.9rem;
   font-weight: bold;

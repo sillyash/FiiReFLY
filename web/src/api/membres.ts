@@ -4,13 +4,15 @@ export interface Pole {
   id: number
   nom: string
   couleur: string
+  ordre: number
 }
 
 export interface Membre {
   id: number
   nom: string
   role: string
-  pole: Pole | null
+  // triés par ordre, le premier = pole principal
+  poles: Pole[]
   photo: string | null
   description: string
 }
