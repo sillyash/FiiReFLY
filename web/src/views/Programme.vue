@@ -106,7 +106,7 @@ export default {
 
   font-family: 'Marcellus SC', 'Garamond', serif;
   color: var(--rose);
-  background: var(--vert) /* url('/img/main-bg.png')*/ ;
+  background: var(--vert) /* url('/img/main-bg.png')*/;
   padding: 2rem 1rem;
 }
 

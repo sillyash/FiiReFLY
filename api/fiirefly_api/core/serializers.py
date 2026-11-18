@@ -12,8 +12,15 @@ class SoireeSerializer(serializers.ModelSerializer):
 class LivreDorEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = LivreDorEntry
-        fields = ['id', 'nom', 'message', 'created_at']
-        read_only_fields = ['nom', 'created_at']
+        fields = ['id', 'nom', 'message', 'created_at', 'updated_at']
+        read_only_fields = ['nom', 'created_at', 'updated_at']
+
+
+class LivreDorMoiSerializer(LivreDorEntrySerializer):
+    # pour son propre message on dit aussi s'il est masqué par la modo
+    class Meta(LivreDorEntrySerializer.Meta):
+        fields = LivreDorEntrySerializer.Meta.fields + ['is_visible']
+        read_only_fields = LivreDorEntrySerializer.Meta.read_only_fields + ['is_visible']
 
 
 class PoleSerializer(serializers.ModelSerializer):
