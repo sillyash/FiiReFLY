@@ -12,39 +12,16 @@ const { theme, toggleTheme } = useTheme()
     @click="toggleTheme"
   >
     <Transition name="flip" mode="out-in">
-      <svg
+      <span
         v-if="theme === 'day'"
         key="sun"
-        class="theme-icon"
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
+        class="theme-icon material-symbols-outlined"
+        aria-hidden="true"
+        >light_mode</span
       >
-        <circle cx="12" cy="12" r="4" />
-        <line x1="12" y1="1" x2="12" y2="4" />
-        <line x1="12" y1="20" x2="12" y2="23" />
-        <line x1="1" y1="12" x2="4" y2="12" />
-        <line x1="20" y1="12" x2="23" y2="12" />
-        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
-        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
-        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
-        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
-      </svg>
-      <svg
-        v-else
-        key="moon"
-        class="theme-icon"
-        viewBox="0 0 24 24"
-        width="22"
-        height="22"
-        fill="currentColor"
+      <span v-else key="moon" class="theme-icon filled material-symbols-outlined" aria-hidden="true"
+        >dark_mode</span
       >
-        <path d="M20 12a8 8 0 1 1-8-8 6 6 0 0 0 8 8z" />
-      </svg>
     </Transition>
   </button>
 </template>
@@ -81,6 +58,12 @@ const { theme, toggleTheme } = useTheme()
 
 .theme-icon {
   display: block;
+  font-size: 22px;
+}
+
+/* la lune etait pleine en svg, on garde ca via l'axe FILL */
+.filled {
+  font-variation-settings: 'FILL' 1;
 }
 
 .flip-enter-active,

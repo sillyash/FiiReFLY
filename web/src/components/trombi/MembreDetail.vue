@@ -1,7 +1,9 @@
 <template>
   <dialog ref="dialog" class="detail" @close="$emit('close')" @click="onBackdrop">
     <div v-if="membre" class="detail-body" :style="{ '--glow-color': couleur }">
-      <button type="button" class="close" aria-label="Fermer" @click="close">✕</button>
+      <button type="button" class="close" aria-label="Fermer" @click="close">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
       <img v-if="membre.photo" class="photo" :src="membre.photo" alt="" />
       <span v-else class="photo initiales" aria-hidden="true">{{ initiales(membre.nom) }}</span>
       <h2>{{ membre.nom }}</h2>
