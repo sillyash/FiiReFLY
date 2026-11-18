@@ -9,7 +9,7 @@
         <p v-if="!mien.is_visible" class="erreur">Masqué par la modération.</p>
         <div class="pied">
           <p v-if="sendError" class="erreur" role="alert">{{ sendError }}</p>
-          <p v-else-if="merci" role="status">Merci ♡</p>
+          <p v-else-if="merci" role="status">Merci</p>
           <button type="button" :disabled="sending" @click="commencerEdition">Modifier</button>
           <button type="button" :disabled="sending" @click="supprimer">Supprimer</button>
         </div>
@@ -21,7 +21,7 @@
         novalidate
         @submit.prevent="envoyer"
       >
-        <h2>{{ edition ? 'Modifier ton message ✎' : "Signer le livre d'or ✎" }}</h2>
+        <h2>{{ edition ? 'Modifier ton message' : "Signer le livre d'or" }}</h2>
 
         <label for="livre-dor-message">Ton message</label>
         <textarea
@@ -29,7 +29,7 @@
           v-model="nouveau"
           :maxlength="messageMax"
           rows="4"
-          placeholder="Laisse un petit mot ♡"
+          placeholder="Laisse un petit mot"
           :aria-invalid="Boolean(fieldError)"
         />
         <p class="compteur">{{ nouveau.length }}/{{ messageMax }}</p>
@@ -37,7 +37,7 @@
 
         <div class="pied">
           <p v-if="sendError" class="erreur" role="alert">{{ sendError }}</p>
-          <p v-else-if="merci" role="status">Merci ♡</p>
+          <p v-else-if="merci" role="status">Merci</p>
           <button v-if="edition" type="button" :disabled="sending" @click="annulerEdition">
             Annuler
           </button>
@@ -47,7 +47,7 @@
         </div>
       </form>
       <p v-else class="carte connexion">
-        <a :href="auth.loginUrl($route.fullPath)">Connecte-toi</a> pour signer le livre d'or ✎
+        <a :href="auth.loginUrl($route.fullPath)">Connecte-toi</a> pour signer le livre d'or
       </p>
     </template>
 
@@ -67,12 +67,12 @@
           <template v-if="estModifie(entry)"> · modifié</template>
         </p>
       </article>
-      <p v-if="!entries.length" class="statut">Personne n'a encore signé, sois le·la premier·e ♡</p>
+      <p v-if="!entries.length" class="statut">Personne n'a encore signé, sois le·la premier·e</p>
 
       <div v-if="hasNext" class="statut">
         <p v-if="loadMoreError">Impossible d'en charger plus :(</p>
         <button type="button" :disabled="loadingMore" @click="chargerPlus">
-          {{ loadingMore ? 'Chargement...' : loadMoreError ? 'Réessayer' : 'Voir plus ↓' }}
+          {{ loadingMore ? 'Chargement...' : loadMoreError ? 'Réessayer' : 'Voir plus en bas' }}
         </button>
       </div>
     </template>
@@ -267,7 +267,7 @@ export default {
           // DRF renvoie { message: ["..."] }
           this.fieldError = Array.isArray(msgErrors) ? msgErrors.join(' ') : String(msgErrors)
         } else if (res?.status === 429) {
-          this.sendError = 'Doucement ♡ trop de messages, réessaie plus tard.'
+          this.sendError = 'Doucement, trop de messages, réessaie plus tard.'
         } else if (res?.status === 401 || res?.status === 403) {
           this.sendError = 'Ta session a expiré, reconnecte-toi.'
         } else {

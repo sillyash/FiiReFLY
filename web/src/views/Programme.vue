@@ -218,26 +218,26 @@ export default {
     margin-bottom: 2rem;
   }
   /* Titre sur le bandeau haut (450×100 → 4.5/1), affiché plus grand */
-.fiirefly .titre {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 720px;
-  aspect-ratio: 4.5 / 1;
-  height: auto;
-  margin: 50px 0 35px;
-  padding: 2.5% 12% 0;
-  font-size: clamp(1.15rem, 5.2vw, 2.3rem);
-  line-height: 1.05;
-  font-weight: bold;
-  background-image: url('/img/small-header-bg.png') !important;
-  background-position: center !important;
-  background-size: 100% 100% !important;
-  background-repeat: no-repeat !important;
-  background-color: transparent !important;
-}
+  .fiirefly .titre {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 4.5 / 1;
+    height: auto;
+    margin: 50px 0 35px;
+    padding: 2.5% 12% 0;
+    font-size: clamp(1.15rem, 5.2vw, 2.3rem);
+    line-height: 1.05;
+    font-weight: bold;
+    background-image: url('/img/small-header-bg.png') !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
+  }
 
   /* Texte aligné à gauche + césure : plus de trous ni de débordement */
   .carte {
