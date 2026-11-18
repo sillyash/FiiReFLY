@@ -97,7 +97,6 @@ export default {
 <style>
 @import url('https://cdn.jsdelivr.net/npm/@fontsource/marcellus-sc@5.3.0/index.css');
 </style>
-
 <style scoped>
 /* Couleurs reprises des mails FiiReFLY */
 .fiirefly {
@@ -106,7 +105,7 @@ export default {
 
   font-family: 'Marcellus SC', 'Garamond', serif;
   color: var(--rose);
-  background: var(--vert) /* url('/img/main-bg.png')*/;
+  background: var(--vert);
   padding: 2rem 1rem;
 }
 
@@ -124,16 +123,20 @@ export default {
   margin-bottom: 3rem;
 }
 
-/* Titre sur le bandeau décoratif (comme les h1 du mail) */
+/* Titre sur le bandeau : la hauteur suit la largeur (900×100 → 9/1) */
 .fiirefly .titre {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: 100%;
   max-width: 900px;
-  height: 100px;
-  line-height: 125px;
+  aspect-ratio: 9 / 1;
+  height: auto;
   margin: 50px 0 35px;
-  padding: 0;
-  font-size: 2.25rem;
+  padding: 2.5% 8% 0;
+  font-size: clamp(1rem, 2.5vw, 2.25rem);
+  line-height: 1.1;
   font-weight: bold;
   background-image: url('/img/large-header-bg.png') !important;
   background-position: center !important;
@@ -142,49 +145,52 @@ export default {
   background-color: transparent !important;
 }
 
-/* Bandeaux plus courts pour les titres courts */
 .fiirefly .titre.small {
   max-width: 450px;
+  aspect-ratio: 4.5 / 1;
   background-image: url('/img/small-header-bg.png') !important;
 }
 
 .fiirefly .titre.medium {
   max-width: 675px;
+  aspect-ratio: 6.75 / 1;
   background-image: url('/img/medium-header-bg.png') !important;
 }
 
 .titre::before {
   content: counter(point) '. ';
+  white-space: pre;
 }
 
-/* Cadre de contenu : milieu répété + bords haut et bas */
+/* Cadre : le milieu se répète en gardant ses proportions */
 .carte {
   position: relative;
-  padding: 0.5rem 65px;
+  padding: 0.5rem 7%;
   text-align: justify;
   font-size: 1.15rem;
   line-height: 1.5;
-  background: url('/img/content-mid-bg.png') center top / 100% 50px repeat-y;
+  background: url('/img/content-mid-bg.png') center top / 100% auto repeat-y;
 }
 
+/* Bords haut et bas (900×25 → 36/1), collés au cadre */
 .carte::before,
 .carte::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  height: 25px;
-  background-size: 100% 25px;
+  aspect-ratio: 36 / 1;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 
 .carte::before {
-  top: -25px;
+  bottom: 100%;
   background-image: url('/img/content-top-bg.png');
 }
 
 .carte::after {
-  bottom: -25px;
+  top: 100%;
   background-image: url('/img/content-bot-bg.png');
 }
 
@@ -199,13 +205,52 @@ export default {
 
 /* Téléphone */
 @media (max-width: 600px) {
-  .fiirefly .titre {
-    font-size: 1.4rem;
-    line-height: 110px;
+  /* Le thème occupe toute la largeur de l'écran, malgré les marges de PageLayout */
+  .fiirefly {
+    box-sizing: border-box;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding: 1.5rem 0.75rem;
   }
 
+  .programme > li {
+    margin-bottom: 2rem;
+  }
+  /* Titre sur le bandeau haut (450×100 → 4.5/1), affiché plus grand */
+.fiirefly .titre {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 4.5 / 1;
+  height: auto;
+  margin: 50px 0 35px;
+  padding: 2.5% 12% 0;
+  font-size: clamp(1.15rem, 5.2vw, 2.3rem);
+  line-height: 1.05;
+  font-weight: bold;
+  background-image: url('/img/small-header-bg.png') !important;
+  background-position: center !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
+}
+
+  /* Texte aligné à gauche + césure : plus de trous ni de débordement */
   .carte {
-    padding: 0.5rem 1.5rem;
+    padding: 0.75rem calc(4% + 0.75rem);
+    font-size: 1rem;
+    line-height: 1.45;
+    text-align: left;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  .carte ul {
+    padding-left: 1.1rem;
   }
 }
 </style>
