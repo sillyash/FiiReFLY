@@ -1,8 +1,27 @@
 <template>
   <PageLayout title="Livre d'or">
     <template v-if="auth.loaded">
-      <form v-if="auth.isLoggedIn" class="carte formulaire" novalidate @submit.prevent="envoyer">
-        <h2>Signer le livre d'or ✎</h2>
+      <p v-if="auth.isLoggedIn && mienLoading" class="statut">Chargement de ton message...</p>
+
+      <div v-else-if="auth.isLoggedIn && mien && !edition" class="carte">
+        <h2>Ton message</h2>
+        <p class="message">{{ mien.message }}</p>
+        <p v-if="!mien.is_visible" class="erreur">Masqué par la modération.</p>
+        <div class="pied">
+          <p v-if="sendError" class="erreur" role="alert">{{ sendError }}</p>
+          <p v-else-if="merci" role="status">Merci ♡</p>
+          <button type="button" :disabled="sending" @click="commencerEdition">Modifier</button>
+          <button type="button" :disabled="sending" @click="supprimer">Supprimer</button>
+        </div>
+      </div>
+
+      <form
+        v-else-if="auth.isLoggedIn"
+        class="carte formulaire"
+        novalidate
+        @submit.prevent="envoyer"
+      >
+        <h2>{{ edition ? 'Modifier ton message ✎' : "Signer le livre d'or ✎" }}</h2>
 
         <label for="livre-dor-message">Ton message</label>
         <textarea
@@ -19,8 +38,11 @@
         <div class="pied">
           <p v-if="sendError" class="erreur" role="alert">{{ sendError }}</p>
           <p v-else-if="merci" role="status">Merci ♡</p>
+          <button v-if="edition" type="button" :disabled="sending" @click="annulerEdition">
+            Annuler
+          </button>
           <button type="submit" :disabled="!peutEnvoyer">
-            {{ sending ? 'Envoi...' : 'Signer !' }}
+            {{ sending ? 'Envoi...' : edition ? 'Enregistrer' : 'Signer !' }}
           </button>
         </div>
       </form>
@@ -42,6 +64,7 @@
         <p class="signature">
           - <span class="nom">{{ entry.nom }}</span> ·
           <time :datetime="entry.created_at">{{ formatDate(entry.created_at) }}</time>
+          <template v-if="estModifie(entry)"> · modifié</template>
         </p>
       </article>
       <p v-if="!entries.length" class="statut">Personne n'a encore signé, sois le·la premier·e ♡</p>
@@ -59,7 +82,15 @@
 <script lang="ts">
 import axios from 'axios'
 
-import { fetchLivreDor, postLivreDor, type LivreDorEntry } from '@/api/livreDor'
+import {
+  deleteLivreDor,
+  fetchLivreDor,
+  fetchMonLivreDor,
+  patchLivreDor,
+  postLivreDor,
+  type LivreDorEntry,
+  type MonEntry,
+} from '@/api/livreDor'
 import PageLayout from '@/components/PageLayout.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -86,6 +117,10 @@ export default {
       fieldError: '',
       merci: false,
       messageMax: MESSAGE_MAX,
+      // son propre message (meme masqué), null = pas encore signé
+      mien: null as MonEntry | null,
+      mienLoading: false,
+      edition: false,
     }
   },
   computed: {
@@ -140,17 +175,75 @@ export default {
         this.loadingMore = false
       }
     },
-    async envoyer() {
-      if (!this.peutEnvoyer) return
-      this.sending = true
+    estModifie(entry: LivreDorEntry): boolean {
+      // > 1 min, sinon auto_now vs auto_now_add different de quelques ms a la creation
+      return Date.parse(entry.updated_at) - Date.parse(entry.created_at) > 60_000
+    },
+    async chargerMien() {
+      this.mienLoading = true
+      try {
+        this.mien = await fetchMonLivreDor()
+      } catch (e) {
+        // tant pis, on affiche le formulaire et l'API dira "deja signé" si besoin
+        console.error(e)
+      } finally {
+        this.mienLoading = false
+      }
+    },
+    resetMessages() {
       this.merci = false
       this.sendError = ''
       this.fieldError = ''
+    },
+    commencerEdition() {
+      if (!this.mien) return
+      this.resetMessages()
+      this.nouveau = this.mien.message
+      this.edition = true
+    },
+    annulerEdition() {
+      this.resetMessages()
+      this.nouveau = ''
+      this.edition = false
+    },
+    async supprimer() {
+      if (!this.mien || this.sending) return
+      if (!confirm('Supprimer ton message du livre d’or ?')) return
+      const id = this.mien.id
+      this.sending = true
+      this.resetMessages()
       try {
-        const entry = await postLivreDor(this.nouveau.trim())
-        // le plus recent en premier donc on le met en haut
-        this.entries.unshift(entry)
+        await deleteLivreDor()
+        this.mien = null
+        this.entries = this.entries.filter((e) => e.id !== id)
+      } catch (e) {
+        console.error(e)
+        const status = axios.isAxiosError(e) ? e.response?.status : undefined
+        this.sendError =
+          status === 401 || status === 403
+            ? 'Ta session a expiré, reconnecte-toi.'
+            : 'La suppression a échoué :( on réessaie ?'
+      } finally {
+        this.sending = false
+      }
+    },
+    async envoyer() {
+      if (!this.peutEnvoyer) return
+      this.sending = true
+      this.resetMessages()
+      try {
+        const message = this.nouveau.trim()
+        const entry = this.edition ? await patchLivreDor(message) : await postLivreDor(message)
+        this.mien = entry
+        const i = this.entries.findIndex((e) => e.id === entry.id)
+        if (i !== -1) {
+          this.entries.splice(i, 1, entry)
+        } else if (entry.is_visible) {
+          // le plus recent en premier donc on le met en haut
+          this.entries.unshift(entry)
+        }
         this.nouveau = ''
+        this.edition = false
         this.merci = true
       } catch (e) {
         console.error(e)
