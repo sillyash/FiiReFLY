@@ -32,11 +32,16 @@ class LivreDorEntry(models.Model):
     nom = models.CharField(max_length=50)
     message = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     # Can be hidden from the admin.
     is_visible = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-created_at']
+        # un seul message par personne, les auteurs NULL (user supprimé, admin) comptent pas
+        constraints = [
+            models.UniqueConstraint(fields=['auteur'], name='livre_dor_un_par_auteur'),
+        ]
         verbose_name = "message du livre d'or"
         verbose_name_plural = "messages du livre d'or"
 
