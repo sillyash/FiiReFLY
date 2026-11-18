@@ -66,3 +66,10 @@ a {
   background-color: var(--color-selection-bg);
   color: var(--color-selection-text);
 }
+
+/* icones Material Symbols inline dans le texte : taille relative + aligné sur la ligne
+   (body devant pour passer apres le css de google, les styles scoped override quand meme) */
+body .material-symbols-outlined {
+  font-size: 1.15em;
+  vertical-align: -0.2em;
+}
