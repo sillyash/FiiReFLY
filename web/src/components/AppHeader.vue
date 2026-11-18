@@ -1,6 +1,7 @@
 <template>
   <header class="site-header">
     <RouterLink id="branding" to="/">
+      <img src="/firefly_icon.png" alt="FiiReFLY Logo" width="70" height="70" />
       <h1>FiiReFLY</h1>
     </RouterLink>
 
