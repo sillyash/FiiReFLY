@@ -17,8 +17,11 @@
 </template>
 
 <script lang="ts">
-import { fetchLivreDor, type LivreDorEntry } from '@/api/livreDor'
+import axios from 'axios'
+
+import { fetchLivreDor, postLivreDor, type LivreDorEntry } from '@/api/livreDor'
 import PageLayout from '@/components/PageLayout.vue'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   name: 'LivreDorView',
@@ -30,7 +33,15 @@ export default {
       entries: [] as LivreDorEntry[],
       loading: true,
       error: false,
+      nouveau: '',
+      sending: false,
+      sendError: '',
     }
+  },
+  computed: {
+    auth() {
+      return useAuthStore()
+    },
   },
   async mounted() {
     try {
@@ -46,6 +57,28 @@ export default {
   methods: {
     formatDate(iso: string): string {
       return new Date(iso).toLocaleDateString('fr-FR')
+    },
+    async envoyer() {
+      const message = this.nouveau.trim()
+      if (!message || this.sending) return
+      this.sending = true
+      this.sendError = ''
+      try {
+        const entry = await postLivreDor(message)
+        this.entries.unshift(entry)
+        this.nouveau = ''
+      } catch (e) {
+        const status = axios.isAxiosError(e) ? e.response?.status : undefined
+        if (status === 429) {
+          this.sendError = 'Doucement, trop de messages, réessaie plus tard.'
+        } else if (status === 401 || status === 403) {
+          this.sendError = 'Ta session a expiré, reconnecte-toi.'
+        } else {
+          this.sendError = "Impossible d'envoyer le message."
+        }
+      } finally {
+        this.sending = false
+      }
     },
   },
 }
