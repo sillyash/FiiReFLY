@@ -1,5 +1,22 @@
 <template>
   <PageLayout title="Livre d'or">
+    <template v-if="auth.loaded">
+      <form v-if="auth.isLoggedIn" class="formulaire" @submit.prevent="envoyer">
+        <textarea
+          v-model="nouveau"
+          maxlength="1000"
+          rows="4"
+          required
+          placeholder="Laisse un petit mot..."
+        />
+        <p v-if="sendError" class="erreur">{{ sendError }}</p>
+        <button type="submit" :disabled="sending || !nouveau.trim()">Envoyer</button>
+      </form>
+      <p v-else class="formulaire">
+        <a :href="auth.loginUrl($route.fullPath)">Connecte-toi</a> pour laisser un message.
+      </p>
+    </template>
+
     <p v-if="loading">Chargement...</p>
     <p v-else-if="error">Impossible de charger le livre d'or, réessaie plus tard.</p>
     <p v-else-if="!entries.length">Aucun message pour l'instant.</p>
@@ -85,6 +102,26 @@ export default {
 </script>
 
 <style scoped>
+.formulaire {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 2rem;
+}
+
+.formulaire textarea {
+  box-sizing: border-box;
+  width: 100%;
+  font: inherit;
+  resize: vertical;
+}
+
+.erreur {
+  margin: 0;
+  color: #c0392b;
+}
+
 .messages {
   margin: 0;
   padding: 0;
