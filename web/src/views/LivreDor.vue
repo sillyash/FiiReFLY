@@ -131,6 +131,20 @@ export default {
       return !this.sending && this.nouveau.trim() !== ''
     },
   },
+  watch: {
+    // auth.loaded arrive parfois apres le mount, donc on surveille
+    'auth.isLoggedIn': {
+      handler(connecte: boolean) {
+        if (connecte) {
+          this.chargerMien()
+        } else {
+          this.mien = null
+          this.edition = false
+        }
+      },
+      immediate: true,
+    },
+  },
   mounted() {
     this.charger()
   },
