@@ -19,17 +19,17 @@ const soirees = [
   {
     titre: 'Soirée x Pipale',
     date: '2026-11-24',
-    description: 'Test hdgdgdhsvsh',
+    description: 'Forêt de Brocéliande',
   },
   {
     titre: 'Soirée x Sérieuse',
     date: '2026-11-30',
-    description: 'Test hdgdgdhsvsh',
+    description: 'Featuring de légende',
   },
   {
     titre: 'Soirée solo',
     date: '2026-12-02',
-    description: 'Test hdgdgdhsvsh',
+    description: "Vous êtes pas prêt-e-s pour l'after",
   },
 ]
 

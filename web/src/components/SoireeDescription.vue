@@ -68,20 +68,20 @@ import {
   utcStamp,
 } from '@/utils/datetime'
 
-// Toutes les soirées : 19h → 1h le lendemain, heure de Paris.
+// Toutes les soirées : 19h 1h
 const START_HOUR = 19
 const END_HOUR = 1
 
 let nextId = 0
 
-// Échappement d'une valeur TEXT iCalendar (RFC 5545 §3.3.11).
+// ICS sinon c broken
 const escapeIcs = (text: string) => text.replace(/[\\;,]/g, '\\$&').replace(/\n/g, '\\n')
 
 export default defineComponent({
   name: 'SoireeDescription',
 
   props: {
-    /** Jour de la soirée, au format AAAA-MM-JJ. */
+    /** format AAAA-MM-JJ. */
     date: { type: String, required: true },
     titre: { type: String, required: true },
     description: { type: String, default: '' },
