@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { api, setCsrfToken } from '@/api/client'
+import { api, getToken, setToken } from '@/api/client'
 import { API_URL, AUTH_ENDPOINTS } from '@/config'
 
 export interface User {
@@ -12,7 +12,11 @@ export interface User {
 
 interface MeResponse {
   user: User | null
-  csrfToken: string
+}
+
+interface TokenResponse {
+  token: string
+  user: User
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -22,9 +26,21 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchMe() {
     try {
-      const { data } = await api.get<MeResponse>(AUTH_ENDPOINTS.me)
+      // pas de token = pas connecte, inutile de demander a l'API
+      user.value = getToken() ? (await api.get<MeResponse>(AUTH_ENDPOINTS.me)).data.user : null
+    } catch {
+      user.value = null
+    } finally {
+      loaded.value = true
+    }
+  }
+
+  /** Retour du login Arise : echange le code court contre un token. */
+  async function exchange(code: string) {
+    try {
+      const { data } = await api.post<TokenResponse>(AUTH_ENDPOINTS.token, { code })
+      setToken(data.token)
       user.value = data.user
-      setCsrfToken(data.csrfToken)
     } catch {
       user.value = null
     } finally {
@@ -38,10 +54,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await api.post(AUTH_ENDPOINTS.logout)
-    // The session (and its CSRF token) changed.
-    await fetchMe()
+    try {
+      await api.post(AUTH_ENDPOINTS.logout)
+    } finally {
+      setToken(null)
+      user.value = null
+    }
   }
 
-  return { user, loaded, isLoggedIn, fetchMe, loginUrl, logout }
+  return { user, loaded, isLoggedIn, fetchMe, exchange, loginUrl, logout }
 })

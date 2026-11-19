@@ -43,7 +43,7 @@ class SoireeApiTests(APITestCase):
         response = self.client.post(
             '/api/soirees/', {'titre': 'x', 'date': timezone.now(), 'lieu': 'x'}
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
 
 class LivreDorApiTests(APITestCase):
@@ -54,7 +54,7 @@ class LivreDorApiTests(APITestCase):
 
     def test_anonymous_cannot_post(self):
         response = self.client.post('/api/livre-dor/', {'message': 'Votez !'})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertFalse(LivreDorEntry.objects.exists())
 
     def test_post_uses_arise_name(self):

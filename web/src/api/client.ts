@@ -2,23 +2,51 @@ import axios from 'axios'
 
 import { API_URL } from '@/config'
 
-const SAFE_METHODS = ['get', 'head', 'options']
+const TOKEN_KEY = 'fiirefly-token'
 
-let csrfToken = ''
-
-/** Set from `/auth/me/`: the API cookie can't be read from the frontend origin. */
-export function setCsrfToken(token: string) {
-  csrfToken = token
+// localStorage peut etre bloque (navigation privee, cookies desactives) -> pas connecte
+export function getToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY)
+  } catch {
+    return null
+  }
 }
 
+export function setToken(token: string | null) {
+  try {
+    if (token) localStorage.setItem(TOKEN_KEY, token)
+    else localStorage.removeItem(TOKEN_KEY)
+  } catch {
+    // tant pis, on reste deconnecte au prochain chargement
+  }
+}
+
+/** Le front est sur un autre site que l'API : auth par token, pas de cookie. */
 export const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
 })
 
 api.interceptors.request.use((config) => {
-  if (csrfToken && !SAFE_METHODS.includes(config.method ?? 'get')) {
-    config.headers.set('X-CSRFToken', csrfToken)
+  const token = getToken()
+  if (token) {
+    config.headers.set('Authorization', `Token ${token}`)
   }
   return config
+})
+
+// token perime / supprime : l'API repond 401 meme sur les GET publics,
+// on l'oublie et on rejoue la requete sans
+api.interceptors.response.use(undefined, (error) => {
+  const config = error.config
+  if (
+    axios.isAxiosError(error) &&
+    error.response?.status === 401 &&
+    config?.headers.has('Authorization')
+  ) {
+    setToken(null)
+    config.headers.delete('Authorization')
+    return api.request(config)
+  }
+  return Promise.reject(error)
 })

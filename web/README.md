@@ -28,10 +28,11 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 | Variable       | Fichier            | Role                                 |
 | -------------- | ------------------ | ------------------------------------ |
 | `VITE_API_URL` | `.env.development` | API locale (`http://localhost:8000`) |
-| `VITE_API_URL` | `.env.production`  | API de prod, meme site que le front  |
+| `VITE_API_URL` | `.env.production`  | API de prod                          |
 
 Surcharge locale possible dans `.env.local` (ignore par git).
-Domaine custom `fiirefly.sillyash.com` (reglé dans Settings > Pages), donc base `/`.
+Deploye sur https://fiirefly.iiens.net (statique) avec
+`just deploy-web` : servi a la racine, donc base `/`.
 
 ## Project Setup
 

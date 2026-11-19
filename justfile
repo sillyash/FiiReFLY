@@ -89,9 +89,9 @@ bump part="patch":
     git add api/pyproject.toml api/uv.lock web/package.json web/package-lock.json
     git commit -m "chore: bump version to $v"
     git tag "v$v"
-    echo "bumped to v$v, run 'just deploy' to publish"
+    echo "bumped to v$v, run 'just deploy' to push + publish the web"
 
-# push main + tag
+# push main + tag, then publish the web
 deploy:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -99,6 +99,15 @@ deploy:
     tag=$(git describe --tags --exact-match HEAD 2>/dev/null) || { echo "HEAD has no tag, run 'just bump' first" >&2; exit 1; }
     git push origin main
     git push origin "$tag"
+    just deploy-web
+
+# compte asso des pages perso de l'ecole, servi sur https://fiirefly.iiens.net
+perso := env("FIIREFLY_PERSO", "fiirefly@perso.iiens.net")
+
+# build + rsync the web to fiirefly.iiens.net (static only, API stays on the homelab)
+deploy-web: build
+    # pas de -p : on garde les droits du dossier html/ cote serveur
+    rsync -rltvz --delete web/dist/ {{ perso }}:html/
 
 clean:
     rm -rf web/dist
