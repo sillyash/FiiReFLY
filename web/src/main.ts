@@ -13,4 +13,5 @@ app.use(router)
 
 app.mount('#app')
 
-useAuthStore().fetchMe()
+// apres la 1ere navigation : si c'est un retour de login (#/connexion), le token est deja la
+router.isReady().then(() => useAuthStore().fetchMe())
