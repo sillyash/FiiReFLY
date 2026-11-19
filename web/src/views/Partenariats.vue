@@ -13,7 +13,7 @@
           <h2>Chopstix</h2>
           <p>
             -10% sur tout le menu avec le code <strong>CHOPSTIXBDE</strong> à rentrer sur
-            l'application mobile Chopstix
+            l'application mobile (<i>option vegan avec le <b>no beef</b> disponible</i>) !
           </p>
           <a
             class="part-lien"
