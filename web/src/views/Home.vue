@@ -29,6 +29,10 @@
           <span class="material-symbols-outlined" aria-hidden="true">group</span>
           Voir les membres
         </RouterLink>
+        <RouterLink to="/partenariats">
+          <span class="material-symbols-outlined">handshake</span>
+          Voir les partenariats
+        </RouterLink>
       </nav>
     </section>
   </PageLayout>

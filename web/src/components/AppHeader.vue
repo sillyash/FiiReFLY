@@ -11,6 +11,7 @@
       <RouterLink to="/soirees" class="nav-link">Soirées</RouterLink>
       <RouterLink to="/livre-dor" class="nav-link">Livre d'or</RouterLink>
       <RouterLink to="/membres" class="nav-link">Membres</RouterLink>
+      <RouterLink to="/partenariats" class="nav-link">Partenariats</RouterLink>
     </div>
 
     <div class="toggles">
