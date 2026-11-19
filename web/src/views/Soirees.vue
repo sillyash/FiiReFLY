@@ -17,17 +17,17 @@ import SoireeDescription from '@/components/SoireeDescription.vue'
 // Toutes les soirées ont lieu de 19h à 1h (heure de Paris) : seule la date est à renseigner.
 const soirees = [
   {
-    titre: 'Soirée x Pipale',
+    titre: 'FiiReFLY x Pipale',
     date: '2026-11-24',
     description: 'Forêt de Brocéliande',
   },
   {
-    titre: 'Soirée x Sérieuse',
+    titre: 'FiiReFLY x Sérieuse',
     date: '2026-11-30',
     description: 'Featuring de légende',
   },
   {
-    titre: 'Soirée solo',
+    titre: 'FiiReFLY solo',
     date: '2026-12-02',
     description: "Vous êtes pas prêt-e-s pour l'after",
   },
