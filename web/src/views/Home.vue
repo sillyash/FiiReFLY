@@ -33,6 +33,10 @@
           <span class="material-symbols-outlined">handshake</span>
           Voir les partenariats
         </RouterLink>
+        <a href="https://discord.gg/zhsQ839TpT" target="_blank">
+          <span class="material-symbols-outlined">forum</span>
+          Serveur Discord
+        </a>
       </nav>
     </section>
   </PageLayout>
