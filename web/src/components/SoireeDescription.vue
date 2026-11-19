@@ -91,7 +91,7 @@ export default defineComponent({
     return {
       menuOpen: false,
       menuId: `calendar-menu-${nextId++}`,
-      displayTime: `${START_HOUR}h–${END_HOUR}h`,
+      displayTime: `${START_HOUR}h-${END_HOUR}h`,
     }
   },
 
