@@ -4,7 +4,7 @@
       <span class="stub-month">{{ month }}</span>
       <span class="stub-day">{{ day }}</span>
       <span class="stub-weekday">{{ weekday }}</span>
-      <span v-if="displayTime" class="stub-time">{{ displayTime }}</span>
+      <span class="stub-time">{{ displayTime }}</span>
     </div>
 
     <div class="ticket-body">
@@ -33,7 +33,7 @@
         @click="toggleMenu"
       >
         <span class="calendar-plus" aria-hidden="true">+</span>
-        <span class="calendar-label">Ajouter au calendrier</span>
+        <span class="calendar-label">Ajouter à l'agenda</span>
       </button>
 
       <ul v-if="menuOpen" :id="menuId" ref="calendarMenu" class="calendar-menu" role="menu">
@@ -56,172 +56,138 @@
   </article>
 </template>
 
-<script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
+import type { TZDate } from '@date-fns/tz'
+import {
+  PARIS_TIME_ZONE,
+  atParisTime,
+  dayOfMonth,
+  shortMonthFr,
+  shortWeekdayFr,
+  utcStamp,
+} from '@/utils/datetime'
 
-interface Props {
-  dateDebut: Date
-  dateFin: Date
-  titre: string
-  description?: string
-  time?: string
-}
+// Toutes les soirées : 19h → 1h le lendemain, heure de Paris.
+const START_HOUR = 19
+const END_HOUR = 1
 
-const props = withDefaults(defineProps<Props>(), {
-  time: '',
-  description: '',
+let nextId = 0
+
+// Échappement d'une valeur TEXT iCalendar (RFC 5545 §3.3.11).
+const escapeIcs = (text: string) => text.replace(/[\\;,]/g, '\\$&').replace(/\n/g, '\\n')
+
+export default defineComponent({
+  name: 'SoireeDescription',
+
+  props: {
+    /** Jour de la soirée, au format AAAA-MM-JJ. */
+    date: { type: String, required: true },
+    titre: { type: String, required: true },
+    description: { type: String, default: '' },
+  },
+
+  data() {
+    return {
+      menuOpen: false,
+      menuId: `calendar-menu-${nextId++}`,
+      displayTime: `${START_HOUR}h–${END_HOUR}h`,
+    }
+  },
+
+  computed: {
+    start(): TZDate {
+      return atParisTime(this.date, 0, START_HOUR)
+    },
+    end(): TZDate {
+      return atParisTime(this.date, 1, END_HOUR)
+    },
+    month(): string {
+      return shortMonthFr(this.start)
+    },
+    day(): string {
+      return dayOfMonth(this.start)
+    },
+    weekday(): string {
+      return shortWeekdayFr(this.start)
+    },
+    isPast(): boolean {
+      return this.end.getTime() <= Date.now()
+    },
+    googleCalendarUrl(): string {
+      const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: this.titre,
+        dates: `${utcStamp(this.start)}/${utcStamp(this.end)}`,
+        details: this.description,
+        ctz: PARIS_TIME_ZONE,
+      })
+      return `https://calendar.google.com/calendar/render?${params}`
+    },
+  },
+
+  mounted() {
+    document.addEventListener('pointerdown', this.onDocumentPointerDown)
+  },
+
+  beforeUnmount() {
+    document.removeEventListener('pointerdown', this.onDocumentPointerDown)
+  },
+
+  methods: {
+    toggleMenu() {
+      if (this.menuOpen) return this.closeMenu()
+      this.menuOpen = true
+      this.$nextTick(() => {
+        const menu = this.$refs.calendarMenu as HTMLElement | undefined
+        menu?.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
+      })
+    },
+
+    closeMenu() {
+      if (!this.menuOpen) return
+      this.menuOpen = false
+      ;(this.$refs.calendarToggle as HTMLElement | undefined)?.focus()
+    },
+
+    isInsideCalendar(node: EventTarget | null) {
+      return (this.$refs.calendar as HTMLElement | undefined)?.contains(node as Node) ?? false
+    },
+
+    onDocumentPointerDown(event: PointerEvent) {
+      if (!this.isInsideCalendar(event.target)) this.menuOpen = false
+    },
+
+    onCalendarFocusOut(event: FocusEvent) {
+      if (event.relatedTarget && !this.isInsideCalendar(event.relatedTarget)) this.menuOpen = false
+    },
+
+    downloadIcs() {
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//FiiReFLY//Soirées//FR',
+        'BEGIN:VEVENT',
+        `UID:soiree-${this.date}@fiirefly`,
+        `DTSTAMP:${utcStamp(new Date())}`,
+        `DTSTART:${utcStamp(this.start)}`,
+        `DTEND:${utcStamp(this.end)}`,
+        `SUMMARY:${escapeIcs(this.titre)}`,
+        ...(this.description ? [`DESCRIPTION:${escapeIcs(this.description)}`] : []),
+        'END:VEVENT',
+        'END:VCALENDAR',
+      ].join('\r\n')
+
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }))
+      link.download = `fiirefly-${this.date}.ics`
+      link.click()
+      URL.revokeObjectURL(link.href)
+
+      this.closeMenu()
+    },
+  },
 })
-
-const menuOpen = ref(false)
-const calendar = ref<HTMLElement | null>(null)
-const calendarToggle = ref<HTMLButtonElement | null>(null)
-const calendarMenu = ref<HTMLUListElement | null>(null)
-
-const parsedDate = computed(() => localDate(props.dateDebut))
-const parsedEndDate = computed(() => localDate(props.dateFin))
-
-const month = computed(() =>
-  parsedDate.value.toLocaleDateString(undefined, { month: 'short' }).replace('.', ''),
-)
-const day = computed(() => String(parsedDate.value.getDate()).padStart(2, '0'))
-const weekday = computed(() =>
-  parsedDate.value.toLocaleDateString(undefined, { weekday: 'short' }).replace('.', ''),
-)
-const displayTime = computed(() => {
-  if (!props.time) return null
-  const [hours = 0, minutes = 0] = props.time.split(':').map(Number)
-  const at = new Date(parsedDate.value)
-  at.setHours(hours, minutes)
-  return at.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-})
-
-const isPast = computed(() => {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  return parsedDate.value < today
-})
-
-const menuId = `calendar-menu-${useId()}`
-
-const calendarEvent = computed(() => {
-  const start = new Date(parsedDate.value)
-  const end = new Date(parsedDate.value)
-  if (props.time) {
-    const [hours = 0, minutes = 0] = props.time.split(':').map(Number)
-    start.setHours(hours, minutes)
-    end.setTime(start.getTime() + 2 * 60 * 60 * 1000)
-  } else {
-    end.setTime(parsedEndDate.value.getTime())
-  }
-  const allDay = !props.time
-  return {
-    title: props.titre,
-    details: props.description,
-    start: calendarStamp(start, allDay),
-    end: calendarStamp(end, allDay),
-    allDay,
-  }
-})
-
-const googleCalendarUrl = computed(() => {
-  const { title, details, start, end } = calendarEvent.value
-  const params = new URLSearchParams({
-    action: 'TEMPLATE',
-    text: title,
-    dates: `${start}/${end}`,
-    details,
-  })
-  return `https://calendar.google.com/calendar/render?${params}`
-})
-
-function toggleMenu() {
-  if (menuOpen.value) {
-    closeMenu()
-    return
-  }
-  menuOpen.value = true
-  nextTick(() => {
-    calendarMenu.value?.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
-  })
-}
-
-function closeMenu() {
-  if (!menuOpen.value) return
-  menuOpen.value = false
-  calendarToggle.value?.focus()
-}
-
-function onDocumentPointerDown(event: PointerEvent) {
-  if (menuOpen.value && !calendar.value?.contains(event.target as Node)) {
-    menuOpen.value = false
-  }
-}
-
-function onCalendarFocusOut(event: FocusEvent) {
-  const next = event.relatedTarget as Node | null
-  if (next && !calendar.value?.contains(next)) {
-    menuOpen.value = false
-  }
-}
-
-function downloadIcs() {
-  const { title, details, start, end, allDay } = calendarEvent.value
-  const dateValue = allDay ? ';VALUE=DATE' : ''
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//FiiReFLY//Soirées//FR',
-    'BEGIN:VEVENT',
-    `UID:${menuId}@fiirefly`,
-    `DTSTAMP:${new Date().toISOString().replace(/[-:]|\.\d{3}/g, '')}`,
-    `DTSTART${dateValue}:${start}`,
-    `DTEND${dateValue}:${end}`,
-    `SUMMARY:${escapeIcs(title)}`,
-    ...(details ? [`DESCRIPTION:${escapeIcs(details)}`] : []),
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ]
-
-  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' })
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = `fiirefly-${calendarStamp(parsedDate.value, true)}.ics`
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
-  setTimeout(() => URL.revokeObjectURL(link.href), 0)
-
-  closeMenu()
-}
-
-onMounted(() => document.addEventListener('pointerdown', onDocumentPointerDown))
-onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPointerDown))
-
-// Escape text for an iCalendar TEXT value (RFC 5545 §3.3.11).
-function escapeIcs(text: string): string {
-  return text.replace(/[\\;,]/g, (char) => `\\${char}`).replace(/\n/g, '\\n')
-}
-
-function localDate(value: Date): Date {
-  const isUtcMidnight =
-    value.getUTCHours() === 0 &&
-    value.getUTCMinutes() === 0 &&
-    value.getUTCSeconds() === 0 &&
-    value.getUTCMilliseconds() === 0
-  const year = isUtcMidnight ? value.getUTCFullYear() : value.getFullYear()
-  const month = isUtcMidnight ? value.getUTCMonth() : value.getMonth()
-  const day = isUtcMidnight ? value.getUTCDate() : value.getDate()
-  return new Date(year, month, day)
-}
-
-// "YYYYMMDD" or "YYYYMMDDTHHMMSS" from the local date fields. No trailing Z: times are
-// "floating", so both Google and .ics read them as the fan's local time.
-function calendarStamp(date: Date, allDay: boolean): string {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  const day = `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`
-  if (allDay) return day
-  return `${day}T${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`
-}
 </script>
 
 <style scoped>
@@ -336,10 +302,6 @@ function calendarStamp(date: Date, allDay: boolean): string {
   align-items: center;
   gap: 0.5rem 1rem;
   margin-top: 0.75rem;
-}
-
-.info-link {
-  color: var(--color-text);
 }
 
 .status {
@@ -463,20 +425,6 @@ function calendarStamp(date: Date, allDay: boolean): string {
   overflow-wrap: anywhere;
   text-align: center;
   white-space: normal;
-}
-
-.stamp {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  padding: 0.1rem 0.5rem;
-  border: 3px double var(--color-accent);
-  color: var(--color-accent);
-  font-size: 2rem;
-  letter-spacing: 0.1em;
-  transform: translateY(-50%) rotate(-14deg);
-  opacity: 0.85;
-  pointer-events: none;
 }
 
 .is-past {
