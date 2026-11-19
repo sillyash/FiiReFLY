@@ -437,8 +437,25 @@ export default defineComponent({
     flex-basis: 4.5rem;
   }
 
+  .stub-month,
+  .stub-weekday {
+    font-size: 1.1rem;
+  }
+
   .stub-day {
     font-size: 2.5rem;
+  }
+
+  .stub-time {
+    font-size: 0.9rem;
+  }
+
+  .event-title {
+    font-size: 1.5rem;
+  }
+
+  .notes {
+    font-size: 1.1rem;
   }
 
   /* Not enough room for a third column: the calendar stub tears off the bottom instead. */
