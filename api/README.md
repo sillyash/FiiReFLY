@@ -50,13 +50,11 @@ Routes :
 
 | Route             | Role                                                   |
 | ----------------- | ------------------------------------------------------ |
-| `/auth/login/`    | redirige vers Arise, `?next=/route-du-front` au retour |
-| `/auth/callback/` | retour d'Arise, cree la session puis redirige au front |
-| `/auth/logout/`   | `POST`, ferme la session                               |
-| `/auth/me/`       | utilisateur connecte (ou `null`) + jeton CSRF          |
-
-La session est un cookie : l'API doit etre sur le meme site que le front
-(ex. `fiirefly-api.sillyash.com` pour `fiirefly.sillyash.com`).
+| `/auth/login/`    | redirige vers Arise, `?next=/route-du-front` au retour             |
+| `/auth/callback/` | retour d'Arise, redirige au front sur `#/connexion?code=...`       |
+| `/auth/token/`    | `POST {code}`, echange le code (valable 2 min) contre un token     |
+| `/auth/logout/`   | `POST`, supprime le token                                          |
+| `/auth/me/`       | utilisateur connecte (ou `null`)                                   |
 
 ## Production
 
@@ -65,8 +63,8 @@ via Cloudflare Tunnel). Config et scripts dans le repo homelab :
 `services/fiirefly/` ([README](https://github.com/sillyash/homelab/tree/main/services/fiirefly)).
 
 ```bash
-# remote = git@github.com:sillyash/FiiReFLY.git (ex-Krokodiile)
-git -C ~/Krokodiile pull
+# remote = git@github.com:sillyash/FiiReFLY.git
+git -C ~/FiiReFLY pull
 sudo ~/homelab/services/fiirefly/deploy.sh
 ```
 

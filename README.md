@@ -3,9 +3,9 @@
 ## Stack
 
 - VueJS : frontend
-  - Deploy sur GitHub (@sillyash) - pero arise maybe ?
+  - Deploy sur les pages perso de l'ecole : https://fiirefly.iiens.net
 - Django : API + DB
-  - Deploy sur perso Arise - sinon RasPi homelab @sillyash ?
+  - Deploy sur le RasPi homelab @sillyash : https://fiirefly-api.sillyash.com
 
 ### Prerequis
 
