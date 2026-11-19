@@ -42,8 +42,8 @@ ALLOWED_HOSTS = env_list('FIIREFLY_ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
 # Frontend origins allowed to call the API (Vite dev server by default).
 CORS_ALLOWED_ORIGINS = env_list('FIIREFLY_CORS_ALLOWED_ORIGINS', 'http://localhost:5173')
-# The frontend sends the session cookie with its requests.
-CORS_ALLOW_CREDENTIALS = True
+# le front (autre site) s'authentifie par token, pas de cookie cross-site
+CORS_ALLOW_CREDENTIALS = False
 CSRF_TRUSTED_ORIGINS = env_list('FIIREFLY_CSRF_TRUSTED_ORIGINS') or CORS_ALLOWED_ORIGINS
 
 SESSION_COOKIE_SECURE = not DEBUG
@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'fiirefly_api.core',
     'fiirefly_api.accounts',
@@ -181,6 +182,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://www.django-rest-framework.org/api-guide/settings/
 
 REST_FRAMEWORK = {
+    # token pour le front (header Authorization), session pour l'admin / API navigable
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     # Read-only for visitors; logged-in users (Arise Connect) can write.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
