@@ -2,12 +2,18 @@
   <PageLayout title="Partenariats">
     <section class="partenaires">
       <article class="part-card">
-        <img class="part-logo" src="/chopstix_logo.jpg" alt="Logo Chopstix" height="70" width="70" />
+        <img
+          class="part-logo"
+          src="/chopstix_logo.jpg"
+          alt="Logo Chopstix"
+          height="70"
+          width="70"
+        />
         <div class="part-content">
           <h2>Chopstix</h2>
           <p>
-            -10% sur tout le menu avec le code <strong>CHOPSTIXBDE</strong> à rentrer
-            sur l'application mobile Chopstix
+            -10% sur tout le menu avec le code <strong>CHOPSTIXBDE</strong> à rentrer sur
+            l'application mobile Chopstix
           </p>
           <a
             class="part-lien"
@@ -82,5 +88,4 @@ export default {
   font-weight: bold;
   text-decoration: none;
 }
-
 </style>
