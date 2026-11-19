@@ -4,7 +4,10 @@
   <PageLayout title="Accueil">
     <section class="about">
       <img class="hero-photo" src="/fiirefly_logo.png" alt="FiiReFLY Logo" />
-      <p class="description">TODO : description</p>
+      <p class="description">
+        Merveilleuse forêt peuplée d'animaux et de végétaux enchanteurs, laissez vous porter par
+        FiireFly, la liste aux milles lucioles
+      </p>
     </section>
 
     <section class="nav-section">
