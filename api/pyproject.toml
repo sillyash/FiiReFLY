@@ -1,6 +1,6 @@
 [project]
 name = "fiirefly-api"
-version = "1.0.5"
+version = "1.1.0"
 description = "API pour FiiReFLY avec Django REST Framework"
 readme = "README.md"
 requires-python = ">=3.11"
