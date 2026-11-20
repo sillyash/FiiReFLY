@@ -6,6 +6,7 @@
       :date="soiree.date"
       :titre="soiree.titre"
       :description="soiree.description"
+      :heure-fin="soiree.heureFin"
     />
   </PageLayout>
 </template>
@@ -14,21 +15,23 @@
 import PageLayout from '@/components/PageLayout.vue'
 import SoireeDescription from '@/components/SoireeDescription.vue'
 
-// Toutes les soirées ont lieu de 19h à 1h (heure de Paris) : seule la date est à renseigner.
 const soirees = [
   {
-    titre: 'FiiReFLY x MEDiiEVAle',
+    titre: 'FiiReFLY x PiiPALE',
     date: '2026-11-23',
+    heureFin: 1,
     description: 'Forêt de Brocéliande + After',
   },
   {
     titre: 'FiiReFLY x MIIragE',
     date: '2026-11-25',
+    heureFin: 2,
     description: 'Le labyrinthe des illusions',
   },
   {
     titre: 'FiiReFLY solo',
-    date: '2026-12-02',
+    date: '2026-12-01',
+    heureFin: 2,
     description: 'La nuit des lucioles',
   },
 ]

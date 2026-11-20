@@ -68,9 +68,8 @@ import {
   utcStamp,
 } from '@/utils/datetime'
 
-// Toutes les soirées : 19h 1h
+// Toutes les soirées commencent à 19h ; l'heure de fin (le lendemain) est une prop.
 const START_HOUR = 19
-const END_HOUR = 1
 
 let nextId = 0
 
@@ -85,22 +84,26 @@ export default defineComponent({
     date: { type: String, required: true },
     titre: { type: String, required: true },
     description: { type: String, default: '' },
+    /** Heure de fin, le lendemain (0-23). */
+    heureFin: { type: Number, default: 1 },
   },
 
   data() {
     return {
       menuOpen: false,
       menuId: `calendar-menu-${nextId++}`,
-      displayTime: `${START_HOUR}h-${END_HOUR}h`,
     }
   },
 
   computed: {
+    displayTime(): string {
+      return `${START_HOUR}h-${this.heureFin}h`
+    },
     start(): TZDate {
       return atParisTime(this.date, 0, START_HOUR)
     },
     end(): TZDate {
-      return atParisTime(this.date, 1, END_HOUR)
+      return atParisTime(this.date, 1, this.heureFin)
     },
     month(): string {
       return shortMonthFr(this.start)
