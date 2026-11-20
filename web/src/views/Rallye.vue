@@ -1,46 +1,157 @@
 <template>
   <PageLayout title="Rallye">
-    <div class="rallye-card">
-      <img src="/rallye_fun.png" alt="Rally Fun illustration" width="1920" height="1080" />
-    </div>
+    <AppCard class="rallye">
+      <section>
+        <h2>Ra'libellule</h2>
+        <ul class="services">
+          <AppCard v-for="service in services" :key="service.label" tag="li" class="service">
+            <div>
+              <p>{{ service.label }}</p>
+              <small v-if="service.details">{{ service.details }}</small>
+            </div>
+            <p class="prix">
+              {{ service.prix }}
+              <small v-if="service.duree">/{{ service.duree }}</small>
+            </p>
+          </AppCard>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Paliers</h2>
+        <ol class="paliers">
+          <li v-for="palier in paliers" :key="palier.montant">
+            <strong>{{ palier.montant }}</strong>
+            <span>{{ palier.objectif }}</span>
+          </li>
+        </ol>
+      </section>
+    </AppCard>
   </PageLayout>
 </template>
 
 <script lang="ts">
+import AppCard from '@/components/AppCard.vue'
 import PageLayout from '@/components/PageLayout.vue'
+
+const services = [
+  { label: 'Nettoyage de votre logis, vaisselle, habits', prix: 'Sur place' },
+  { label: 'Achat de vos provisions', prix: '1€' },
+  { label: 'Entretien de vos plantes', prix: '1€' },
+  { label: "Imitation d'une plante chez la victime de votre choix", prix: '0,5€', duree: '10min' },
+  {
+    label: 'Fable',
+    details: 'Cours de botanique, cours sur les lucioles, histoire magique',
+    prix: '1€',
+  },
+  { label: 'Malédiction...', prix: '1€', duree: '10min' },
+  { label: 'Vidéo personnalisée de DIDOU', prix: '1,5€' },
+  { label: 'Séance de sport à domicile', prix: '1,5€', duree: '30min' },
+  { label: 'Clash de la victime de votre choix (gentil)', prix: '2€' },
+  { label: 'Piment sur la place publique', prix: '2€' },
+]
+
+const paliers = [
+  { montant: '100€', objectif: 'Drop V1' },
+  { montant: '200€', objectif: 'Didou & Tom files leak' },
+  { montant: '250€', objectif: 'Vlog nuit aux Coquibus' },
+  { montant: '300€', objectif: 'Cover son & image : Adventure of a Lifetime - Coldplay' },
+  { montant: '500€', objectif: '????' },
+]
 
 export default {
   name: 'RallyeView',
   components: {
+    AppCard,
     PageLayout,
+  },
+  data() {
+    return { services, paliers }
   },
 }
 </script>
 
 <style scoped>
-.rallye-card {
-  max-width: 80rem;
-  margin: 0 auto;
+.rallye {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 2rem;
+  max-width: 60rem;
+  margin: 0 auto 2rem;
 }
 
-/* width/height en attributs = ratio reserve, pas de saut au chargement */
-.rallye-card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
 }
 
-/* telephone : pleine largeur d'ecran, on sort du padding de main / PageLayout */
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0;
+}
+
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rallye .service {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg);
+}
+
+.prix {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-weight: bold;
+  text-align: right;
+}
+
+.paliers {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--color-accent);
+}
+
+.paliers li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.paliers li::before {
+  content: '';
+  position: absolute;
+  top: 0.35rem;
+  left: calc(-1.25rem - 3px / 2 - 0.4rem);
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.paliers strong {
+  font-size: 1.2rem;
+  color: var(--color-accent);
+}
+
+/* telephone : les colonnes se suivent */
 @media (max-width: 700px) {
-  .rallye-card {
-    width: 100vw;
-    max-width: none;
-    margin-left: calc(50% - 50vw);
-  }
-
-  .rallye-card img {
-    border-radius: 0;
+  .rallye {
+    grid-template-columns: 1fr;
   }
 }
 </style>
