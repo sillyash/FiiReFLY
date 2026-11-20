@@ -4,10 +4,10 @@
   <PageLayout title="Accueil">
     <section class="about">
       <img class="hero-photo" src="/fiirefly_logo.png" alt="FiiReFLY Logo" />
-      <p class="description">
+      <AppCard tag="p">
         Merveilleuse forêt peuplée d'animaux et de végétaux enchanteurs, laissez vous porter par
         FiireFly, la liste aux milles lucioles
-      </p>
+      </AppCard>
     </section>
 
     <section class="nav-section">
@@ -47,12 +47,14 @@
 </template>
 
 <script lang="ts">
+import AppCard from '@/components/AppCard.vue'
 import ForestBackground from '@/components/forest/ForestBackground.vue'
 import PageLayout from '@/components/PageLayout.vue'
 
 export default {
   name: 'HomeView',
   components: {
+    AppCard,
     ForestBackground,
     PageLayout,
   },
@@ -67,13 +69,6 @@ section {
 
 section + section {
   margin-top: 3rem;
-}
-
-.description {
-  padding: 1.25rem;
-  border-radius: 0.75rem;
-  background: var(--color-surface);
-  color: var(--color-text);
 }
 
 .hero-photo {

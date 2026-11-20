@@ -1,7 +1,7 @@
 <template>
   <PageLayout title="Partenariats">
     <section class="partenaires">
-      <article class="part-card">
+      <AppCard tag="article" class="part-card">
         <img
           class="part-logo"
           src="/chopstix_logo.jpg"
@@ -24,17 +24,19 @@
             Application
           </a>
         </div>
-      </article>
+      </AppCard>
     </section>
   </PageLayout>
 </template>
 
 <script lang="ts">
+import AppCard from '@/components/AppCard.vue'
 import PageLayout from '@/components/PageLayout.vue'
 
 export default {
   name: 'PartenariatsView',
   components: {
+    AppCard,
     PageLayout,
   },
 }
@@ -49,15 +51,10 @@ export default {
   margin: 0 auto 2rem;
 }
 
-/* meme style que .description de l'accueil */
 .part-card {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  padding: 1.25rem;
-  border-radius: 0.75rem;
-  background: var(--color-surface);
-  color: var(--color-text);
 }
 
 .part-logo {
