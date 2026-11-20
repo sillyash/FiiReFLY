@@ -29,7 +29,7 @@ const soirees = [
   {
     titre: 'FiiReFLY solo',
     date: '2026-12-02',
-    description: 'La nuit des lucioles + After',
+    description: 'La nuit des lucioles',
   },
 ]
 
