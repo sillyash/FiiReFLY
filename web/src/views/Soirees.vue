@@ -24,12 +24,12 @@ const soirees = [
   {
     titre: 'FiiReFLY x MIIragE',
     date: '2026-11-25',
-    description: 'Featuring de légende',
+    description: 'Le labyrinthe des illusions',
   },
   {
     titre: 'FiiReFLY solo',
     date: '2026-12-02',
-    description: "Vous êtes pas prêt⋅e⋅s pour l'after",
+    description: 'La nuit des lucioles + After',
   },
 ]
 
