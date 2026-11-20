@@ -17,7 +17,7 @@ import SoireeDescription from '@/components/SoireeDescription.vue'
 
 const soirees = [
   {
-    titre: 'FiiReFLY x PiiPALE',
+    titre: 'FiiReFLY x MÉDiiÉVALe',
     date: '2026-11-23',
     heureFin: 1,
     description: 'Forêt de Brocéliande + After',
@@ -29,7 +29,7 @@ const soirees = [
     description: 'Le labyrinthe des illusions',
   },
   {
-    titre: 'FiiReFLY solo',
+    titre: 'FiiReFLY',
     date: '2026-12-01',
     heureFin: 2,
     description: 'La nuit des lucioles',
