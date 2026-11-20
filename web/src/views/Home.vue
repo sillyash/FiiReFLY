@@ -33,6 +33,10 @@
           <span class="material-symbols-outlined">handshake</span>
           Voir les partenariats
         </RouterLink>
+        <RouterLink to="/rallye">
+          <span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span>
+          Voir les rallyes
+        </RouterLink>
         <a href="https://discord.gg/zhsQ839TpT" target="_blank">
           <span class="material-symbols-outlined">forum</span>
           Serveur Discord

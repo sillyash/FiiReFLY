@@ -12,6 +12,7 @@
       <RouterLink to="/livre-dor" class="nav-link">Livre d'or</RouterLink>
       <RouterLink to="/membres" class="nav-link">Membres</RouterLink>
       <RouterLink to="/partenariats" class="nav-link">Partenariats</RouterLink>
+      <RouterLink to="/rallye" class="nav-link">Rallye</RouterLink>
     </div>
 
     <div class="toggles">
