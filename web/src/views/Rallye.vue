@@ -53,6 +53,7 @@ const services = [
 
 const paliers = [
   { montant: '100€', objectif: 'Drop V1' },
+  { montant: '150€', objectif: 'Jeu vidéo de la liste' },
   { montant: '200€', objectif: 'Didou & Tom files leak' },
   { montant: '250€', objectif: 'Vlog nuit aux Coquibus' },
   { montant: '300€', objectif: 'Cover son & image : Adventure of a Lifetime - Coldplay' },
