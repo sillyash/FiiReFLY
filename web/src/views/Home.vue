@@ -6,7 +6,7 @@
       <img class="hero-photo" src="/fiirefly_logo.png" alt="FiiReFLY Logo" />
       <AppCard tag="p">
         Merveilleuse forêt peuplée d'animaux et de végétaux enchanteurs, laissez vous porter par
-        FiireFly, la liste aux milles lucioles
+        FiireFly, la liste aux mille lucioles
       </AppCard>
     </section>
 
