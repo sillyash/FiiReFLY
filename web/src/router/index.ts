@@ -7,6 +7,7 @@ import Membres from '@/views/Membres.vue'
 import Programme from '@/views/Programme.vue'
 import Partenariats from '@/views/Partenariats.vue'
 import Rallye from '@/views/Rallye.vue'
+import Extras from '@/views/Extras.vue'
 import { useAuthStore } from '@/stores/auth'
 
 // meme regle que safe_next cote API : un chemin du front, jamais un autre host
@@ -24,6 +25,7 @@ const router = createRouter({
     { path: '/membres', name: 'membres', component: Membres },
     { path: '/partenariats', name: 'partenariats', component: Partenariats },
     { path: '/rallye', name: 'rallye', component: Rallye },
+    { path: '/extras', name: 'extras', component: Extras },
     // retour du login Arise (#/connexion?code=...&next=...), jamais affichee
     {
       path: '/connexion',

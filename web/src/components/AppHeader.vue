@@ -13,6 +13,7 @@
       <RouterLink to="/membres" class="nav-link">Membres</RouterLink>
       <RouterLink to="/partenariats" class="nav-link">Partenariats</RouterLink>
       <RouterLink to="/rallye" class="nav-link">Rallye</RouterLink>
+      <RouterLink to="/extras" class="nav-link">Extras</RouterLink>
     </div>
 
     <div class="toggles">
