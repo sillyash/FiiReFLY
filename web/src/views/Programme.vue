@@ -7,7 +7,7 @@
           Nous proposons que la totalité des repas faits par le BdE soient des repas végétariens,
           avec une option vegan systématiquement.
         </p>
-        <AppCard tad="aside">
+        <AppCard tag="aside">
           <p>
             Cela prend en compte les repas lors de soirées où le repas est préparé par le BdE, à
             l'intégration et potentiellement jusqu'au WEI. Cela permet de respecter les animaux ou
@@ -23,7 +23,7 @@
           caritatives. Cela peut être par exemple une collecte de fonds ou une collecte de matériel.
           On a également prévu d'organiser des cleanwalks dans Evry.
         </p>
-        <AppCard tad="aside">
+        <AppCard tag="aside">
           <p>Les associations que nous souhaitons contacter sont :</p>
           <ul>
             <li>
@@ -51,7 +51,7 @@
               Nous pensons que réduire la densité de soirées pourrait permettre à plus d'iien·ne de
               venir à de plus grosses soirées pendant la période de l'intégration
             </p>
-            <AppCard tad="aside">
+            <AppCard tag="aside">
               <p>
                 Cette période de l'année est dense, et nous pensons qu'avoir des soirées tous les
                 soirs peut être contre-productif. C'est pourquoi nous souhaitons diminuer légèrement
@@ -69,7 +69,7 @@
               concernant une revalorisation de la vie associative, que ce ne soit plus quelque chose
               d'adjacent à l'école mais qui soit directement intégré à la vie de l'école.
             </p>
-            <AppCard tad="aside">
+            <AppCard tag="aside">
               <p>
                 Par exemple des absences justifiées lors des périodes intenses (intégration,
                 campagne, organisation pré-évènements, …) ou des évènements en collaboration avec
@@ -88,7 +88,7 @@
               Cela permettrait de créer des pipales plus facilement, et ainsi avoir une pré-campagne
               et une campagne plus active, et intéresser plus d'élèves dans la vie associative.
             </p>
-            <AppCard tad="aside">
+            <AppCard tag="aside">
               <p>
                 Ce statut existe selon le règlement du CBDE, l'idée ici est de l'inclure au sein des
                 statuts, car c'est le quota de membres actifs par promotion qui peut être difficile
@@ -115,7 +115,7 @@
           En plus du comité Anti-HVSS, externe au BdE, il existait avant un comité de prévention. On
           s'engage à le remettre sur pied, toujours indépendamment du BdE.
         </p>
-        <AppCard tad="aside">
+        <AppCard tag="aside">
           <p>
             Ce comité de prévention a pour but de mettre en œuvre des projets de sensibilisation et
             de prévention dans les domaines de la santé mentale et des addictions.
@@ -153,5 +153,28 @@ export default {
 
 .programme ol > li::marker {
   font-weight: bold;
+}
+
+@media (max-width: 700px) {
+  .programme {
+    padding: 0.5rem;
+  }
+
+  .programme > li::marker {
+    font-size: 1.15rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+  }
+
+  li {
+    padding-left: 0;
+  }
+
+  ul,
+  ol {
+    padding-left: 1rem;
+  }
 }
 </style>
