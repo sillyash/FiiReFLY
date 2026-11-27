@@ -106,8 +106,7 @@ perso := env("FIIREFLY_PERSO", "fiirefly@perso.iiens.net")
 
 # build + rsync the web to fiirefly.iiens.net (static only, API stays on the homelab)
 deploy-web: build
-    # pas de -p : on garde les droits du dossier html/ cote serveur
-    rsync -rltvz --delete web/dist/ {{ perso }}:html/
+    rsync -rltvz web/dist/ {{ perso }}:html/
 
 clean:
     rm -rf web/dist
