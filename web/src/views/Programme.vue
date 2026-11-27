@@ -122,6 +122,19 @@
           </p>
         </AppCard>
       </li>
+      <li>
+        <h2>Continuité de projets en cours</h2>
+        <p>
+          Nous poursuivrons les projets déjà commencés lors des précédents mandats, comme la cuisine
+          collective au sein de l'école ou le changement de banque.
+        </p>
+        <AppCard tag="aside">
+          <p>
+            Aussi, nous avons prévu de faire une relance de ResIIE, pour l'aide aux logements des
+            étudiants.
+          </p>
+        </AppCard>
+      </li>
     </ol>
   </PageLayout>
 </template>
