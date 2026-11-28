@@ -1,6 +1,31 @@
 <template>
-  <PageLayout title="Rallye">
-    <AppCard class="rallye">
+  <PageLayout title="Rallyes">
+    <AppCard class="rallye rallye-bouffe">
+      <section>
+        <h2>Ral'Hibiscus</h2>
+        <ul class="bouffes">
+          <AppCard
+            v-for="categorie in bouffes"
+            :key="categorie.label"
+            tag="ul"
+            class="bouffe-categorie"
+          >
+            <h3>{{ categorie.label }}</h3>
+            <AppCard v-for="bouffe in categorie.items" :key="bouffe.label" tag="li" class="bouffe">
+              <div>
+                <p>{{ bouffe.label }}</p>
+                <small v-if="bouffe.details">{{ bouffe.details }}</small>
+              </div>
+              <p class="prix">
+                {{ bouffe.prix }}
+              </p>
+            </AppCard>
+          </AppCard>
+        </ul>
+      </section>
+    </AppCard>
+
+    <AppCard class="rallye rallye-fun">
       <section>
         <h2>Ra'libellule</h2>
         <ul class="services">
@@ -51,6 +76,55 @@ const services = [
   { label: 'Piment sur la place publique', prix: '2€' },
 ]
 
+const bouffes = [
+  {
+    label: 'Entrées',
+    items: [
+      {
+        label: 'Chakchouka',
+        details: 'Tomates, oignons et poivron à la poêle',
+        prix: '1€',
+      },
+      {
+        label: 'Salade des bois',
+        details: 'Concombres marinés, carottes rapées et chou blanc',
+        prix: '0,5€',
+      },
+    ],
+  },
+  {
+    label: 'Plats',
+    items: [
+      {
+        label: 'Couscous magique',
+        details:
+          'Pommes de terre, citrouille, pois chiches, carottes, oignon et semoule, le tout avec une sauce tomate et quelques épices',
+        prix: '1€',
+      },
+      {
+        label: 'Riz féérique aux PST',
+        details: 'Riz, sauce et protéines de soja texturées',
+        prix: '1€',
+      },
+    ],
+  },
+  {
+    label: 'Desserts',
+    items: [
+      {
+        label: 'Pancake de la forêt',
+        details: 'Des pancakes complètement vegans',
+        prix: '0,5€',
+      },
+      {
+        label: 'Bissap',
+        details: "Jus de fleur d'hibiscus avec de la menthe et du sucre",
+        prix: '0,8€',
+      },
+    ],
+  },
+]
+
 const paliers = [
   { montant: '100€', objectif: 'Drop V1' },
   { montant: '150€', objectif: 'Jeu vidéo de la liste' },
@@ -67,18 +141,26 @@ export default {
     PageLayout,
   },
   data() {
-    return { services, paliers }
+    return { services, bouffes, paliers }
   },
 }
 </script>
 
 <style scoped>
 .rallye {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
   gap: 2rem;
   max-width: 60rem;
   margin: 0 auto 2rem;
+}
+
+.rallye-fun {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+}
+
+.rallye-bouffe {
+  display: grid;
+  grid-template-columns: 5fr;
 }
 
 h2 {
@@ -97,13 +179,22 @@ p {
   margin: 0;
 }
 
-.services {
+.bouffe-categorie {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0.75rem;
+}
+
+.services,
+.bouffes {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.rallye .service {
+.rallye .service,
+.rallye .bouffe {
   display: flex;
   justify-content: space-between;
   align-items: center;
